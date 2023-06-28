@@ -2,11 +2,11 @@
 
 namespace Checkout.Data
 {
-    internal class AvailableProducts
+    public static class AvailableProducts
     {
-        public List<Product> Items { get; set; }
+        public static List<Product> Items { get; set; }
 
-        public AvailableProducts()
+        static AvailableProducts()
         {
             Items = new List<Product>
             {

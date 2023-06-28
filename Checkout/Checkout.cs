@@ -8,7 +8,7 @@ namespace Checkout
         int GetTotalPrice();
     }
 
-    internal class Checkout : ICheckout
+    public class Checkout : ICheckout
     {
         private Discounts _discounts;
         private List<Product> _items { get; set; }
@@ -26,7 +26,14 @@ namespace Checkout
 
         public void Scan(string item)
         {
-            throw new NotImplementedException();
+            var product = Data.AvailableProducts.Items.FirstOrDefault(f => f.SKU == item);
+
+            _items.Add(product);
+        }
+
+        public List<Product> Find(string sku)
+        {
+            return _items.FindAll(f => f.SKU == sku);
         }
     }
 }

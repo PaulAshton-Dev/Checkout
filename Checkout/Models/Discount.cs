@@ -1,6 +1,6 @@
 ﻿namespace Checkout.Models
 {
-    internal class Discounts
+    public class Discounts
     {
         public List<Discount> Items { get; private set; }
 
@@ -15,7 +15,7 @@
         }
     }
 
-    internal class Discount
+    public class Discount
     {
         public string Sku { get; set; }
         public int Quantity { get; set; }
