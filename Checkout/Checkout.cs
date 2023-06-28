@@ -28,6 +28,8 @@ namespace Checkout
         {
             var product = Data.AvailableProducts.Items.FirstOrDefault(f => f.SKU == item);
 
+            if (product == null) throw new ArgumentOutOfRangeException("Unknown Sku");
+
             _items.Add(product);
         }
 

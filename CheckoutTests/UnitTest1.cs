@@ -18,16 +18,18 @@ namespace CheckoutTests
             Assert.AreEqual(1, result.Count);
         }
 
-        [TestMethod, Ignore("todo")]
-
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException), "An unknown product has been scanned")]
         public void Test002_Scan_Unknown_Item_Failure()
         {
             // arrange
+            const string sku = "Z";
+            var checkout = new Checkout.Checkout(new Checkout.Models.Discounts());
 
             // act
+            checkout.Scan(sku);
 
-            // assert
-
+            // assert Exception thrown
         }
 
     }
