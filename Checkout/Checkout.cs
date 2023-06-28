@@ -23,8 +23,21 @@ namespace Checkout
         {
             decimal totalPrice = 0;
 
+            foreach (var discountRule in _discounts.Items)
+            {
+                decimal total = _basket.Where(item => item.Sku == discountRule.Sku).Sum(item => item.Amount);
+            }
+
+
+
+
+
             foreach (var item in _basket)
             {
+
+
+
+
                 totalPrice += item.Price;
             }
 
@@ -33,7 +46,7 @@ namespace Checkout
 
         public void Scan(string item)
         {
-            var product = Data.AvailableProducts.Items.FirstOrDefault(f => f.SKU == item);
+            var product = Data.AvailableProducts.Items.FirstOrDefault(f => f.Sku == item);
 
             if (product == null) throw new ArgumentOutOfRangeException("Unknown Sku");
 
@@ -42,7 +55,7 @@ namespace Checkout
 
         public List<Product> Find(string sku)
         {
-            return _basket.FindAll(f => f.SKU == sku);
+            return _basket.FindAll(f => f.Sku == sku);
         }
 
         public int CountItems()

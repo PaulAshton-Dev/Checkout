@@ -43,8 +43,8 @@ namespace CheckoutTests
             // act
             foreach (var scanItem in AvailableProducts.Items)
             {
-                checkout.Scan(scanItem.SKU);
-                checkout.Scan(scanItem.SKU);
+                checkout.Scan(scanItem.Sku);
+                checkout.Scan(scanItem.Sku);
             }
 
             // assert
@@ -62,10 +62,10 @@ namespace CheckoutTests
             // act
             foreach (var scanItem in AvailableProducts.Items)
             {
-                checkout.Scan(scanItem.SKU);
+                checkout.Scan(scanItem.Sku);
                 expectedTotalPrice += scanItem.Price;
 
-                checkout.Scan(scanItem.SKU);
+                checkout.Scan(scanItem.Sku);
                 expectedTotalPrice += scanItem.Price;
             }
 
