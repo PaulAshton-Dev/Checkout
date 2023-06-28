@@ -23,22 +23,35 @@ namespace Checkout
         {
             decimal totalPrice = 0;
 
-            foreach (var discountRule in _discounts.Items)
+            if (_discounts.Items.Count() > 0)
             {
-                decimal total = _basket.Where(item => item.Sku == discountRule.Sku).Sum(item => item.Amount);
+                var productGroup = _basket.GroupBy(i => i);
+
+                // loop over the group sku and count
+                foreach (var pgSku in productGroup)
+                {
+                    var discountRule = _discounts.Items.FirstOrDefault(f => f.Sku == pgSku.Key.Sku);
+
+                    if (discountRule == null)
+                    {
+                        totalPrice += pgSku.Key.Price * pgSku.Count();
+                    }
+                    else
+                    {
+                        int noOfTimesDiscountApplies = pgSku.Count() / discountRule.Quantity;
+                        int remainder = pgSku.Count() % discountRule.Quantity;
+
+                        totalPrice += (noOfTimesDiscountApplies * discountRule.Value) + (remainder * pgSku.Key.Price);
+                    }
+                }
             }
-
-
-
-
-
-            foreach (var item in _basket)
+            else
             {
-
-
-
-
-                totalPrice += item.Price;
+                // no discounts then easy pricing
+                foreach (var item in _basket)
+                {
+                    totalPrice += item.Price;
+                }
             }
 
             return totalPrice;
