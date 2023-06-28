@@ -1,4 +1,5 @@
-﻿using Checkout.Models;
+﻿using Checkout.Data;
+using Checkout.Models;
 
 namespace Checkout
 {
@@ -11,12 +12,16 @@ namespace Checkout
     public class Checkout : ICheckout
     {
         private Discounts _discounts;
-        private List<Product> _basket { get; set; }
+        private List<Product> _basket;
+        private AvailableProducts _availableProducts;
 
-        public Checkout(Discounts discounts)
+        public Checkout(
+            Discounts discounts,
+            AvailableProducts availableProducts)
         {
             _discounts = discounts;
             _basket = new List<Product>();
+            _availableProducts = availableProducts;
         }
 
         public decimal GetTotalPrice()
@@ -61,7 +66,7 @@ namespace Checkout
 
         public void Scan(string item)
         {
-            var product = Data.AvailableProducts.Items.FirstOrDefault(f => f.Sku == item);
+            var product = _availableProducts.Items.FirstOrDefault(f => f.Sku == item);
 
             if (product == null) throw new ArgumentOutOfRangeException("Unknown Sku");
 

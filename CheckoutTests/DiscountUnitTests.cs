@@ -3,6 +3,21 @@
     [TestClass]
     public class DiscountUnitTests
     {
+
+        private Checkout.Data.AvailableProducts? _availableProducts;
+
+        [TestInitialize]
+        public void ClassInitialize()
+        {
+            _availableProducts = new Checkout.Data.AvailableProducts();
+        }
+
+        [TestCleanup]
+        public void ClassCleanup()
+        {
+            _availableProducts = null;
+        }
+
         [TestMethod]
         public void Test001_Discount_For_Sku_A_3_For_130_Is_NOT_Applied()
         {
@@ -12,7 +27,7 @@
             var discount = new Checkout.Models.Discount { Sku = sku, Quantity = 3, Value = 1.30M };
             discounts.Add(discount);
 
-            var checkout = new Checkout.Checkout(discounts);
+            var checkout = new Checkout.Checkout(discounts, _availableProducts);
 
             // act
             checkout.Scan(sku);
@@ -34,7 +49,7 @@
             var discount = new Checkout.Models.Discount { Sku = sku, Quantity = 3, Value = 1.30M };
             discounts.Add(discount);
 
-            var checkout = new Checkout.Checkout(discounts);
+            var checkout = new Checkout.Checkout(discounts, _availableProducts);
 
             // act
             checkout.Scan(sku);
@@ -53,6 +68,7 @@
 
             Assert.AreNotEqual(discount.Value, singleItem + singlediscount);
         }
+
         [TestMethod]
         public void Test002_Discount_For_Sku_A_B_C_D_Discounts_ARE_Applied()
         {
@@ -63,7 +79,8 @@
             discounts.Add(discountA);
             discounts.Add(discountB);
 
-            var checkout = new Checkout.Checkout(discounts);
+
+            var checkout = new Checkout.Checkout(discounts, _availableProducts);
 
             // act
             checkout.Scan("A");

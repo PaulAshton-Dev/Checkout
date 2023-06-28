@@ -1,16 +1,28 @@
-using Checkout.Data;
-
 namespace CheckoutTests
 {
     [TestClass]
     public class ScanUnitTests
     {
+        private Checkout.Data.AvailableProducts? _availableProducts;
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            _availableProducts = new Checkout.Data.AvailableProducts();
+        }
+
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            _availableProducts = null;
+        }
+
         [TestMethod]
         public void Test001_Scan_Item_Success()
         {
             // arrange
             const string sku = "A";
-            var checkout = new Checkout.Checkout(new Checkout.Models.Discounts());
+            var checkout = new Checkout.Checkout(new Checkout.Models.Discounts(), _availableProducts);
 
             // act
             checkout.Scan(sku);
@@ -26,7 +38,7 @@ namespace CheckoutTests
         {
             // arrange
             const string sku = "Z";
-            var checkout = new Checkout.Checkout(new Checkout.Models.Discounts());
+            var checkout = new Checkout.Checkout(new Checkout.Models.Discounts(), _availableProducts);
 
             // act
             checkout.Scan(sku);
@@ -38,10 +50,10 @@ namespace CheckoutTests
         public void Test003_Scan_Multiple_Items_Success()
         {
             // arrange
-            var checkout = new Checkout.Checkout(new Checkout.Models.Discounts());
+            var checkout = new Checkout.Checkout(new Checkout.Models.Discounts(), _availableProducts);
 
             // act
-            foreach (var scanItem in AvailableProducts.Items)
+            foreach (var scanItem in _availableProducts.Items)
             {
                 checkout.Scan(scanItem.Sku);
                 checkout.Scan(scanItem.Sku);
@@ -49,7 +61,7 @@ namespace CheckoutTests
 
             // assert
             var result = checkout.CountItems();
-            Assert.AreEqual(AvailableProducts.Items.Count * 2, result);
+            Assert.AreEqual(_availableProducts.Items.Count * 2, result);
         }
 
         [TestMethod]
@@ -57,10 +69,10 @@ namespace CheckoutTests
         {
             // arrange
             decimal expectedTotalPrice = 0;
-            var checkout = new Checkout.Checkout(new Checkout.Models.Discounts());
+            var checkout = new Checkout.Checkout(new Checkout.Models.Discounts(), _availableProducts);
 
             // act
-            foreach (var scanItem in AvailableProducts.Items)
+            foreach (var scanItem in _availableProducts.Items)
             {
                 checkout.Scan(scanItem.Sku);
                 expectedTotalPrice += scanItem.Price;
@@ -71,7 +83,7 @@ namespace CheckoutTests
 
             // assert
             var result = checkout.CountItems();
-            Assert.AreEqual(AvailableProducts.Items.Count * 2, result);
+            Assert.AreEqual(_availableProducts.Items.Count * 2, result);
 
             var price = checkout.GetTotalPrice();
             Assert.AreEqual(expectedTotalPrice, price);
