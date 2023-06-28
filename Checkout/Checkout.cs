@@ -5,7 +5,7 @@ namespace Checkout
     interface ICheckout
     {
         void Scan(string item);
-        int GetTotalPrice();
+        decimal GetTotalPrice();
     }
 
     public class Checkout : ICheckout
@@ -19,9 +19,16 @@ namespace Checkout
             _basket = new List<Product>();
         }
 
-        public int GetTotalPrice()
+        public decimal GetTotalPrice()
         {
-            throw new NotImplementedException();
+            decimal totalPrice = 0;
+
+            foreach (var item in _basket)
+            {
+                totalPrice += item.Price;
+            }
+
+            return totalPrice;
         }
 
         public void Scan(string item)
