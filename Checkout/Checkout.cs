@@ -34,10 +34,12 @@ namespace Checkout
 
                     if (discountRule == null)
                     {
+                        // no discount to apply for this sku
                         totalPrice += pgSku.Key.Price * pgSku.Count();
                     }
                     else
                     {
+                        // apply discount rules
                         int noOfTimesDiscountApplies = pgSku.Count() / discountRule.Quantity;
                         int remainder = pgSku.Count() % discountRule.Quantity;
 
