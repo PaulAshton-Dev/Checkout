@@ -1,7 +1,9 @@
+using Checkout.Data;
+
 namespace CheckoutTests
 {
     [TestClass]
-    public class UnitTest1
+    public class ScanUnitTests
     {
         [TestMethod]
         public void Test001_Scan_Item_Success()
@@ -32,5 +34,24 @@ namespace CheckoutTests
             // assert Exception thrown
         }
 
+        [TestMethod]
+        public void Test003_Scan_Multiple_Item_Success()
+        {
+            // arrange
+            const string sku = "A";
+            var checkout = new Checkout.Checkout(new Checkout.Models.Discounts());
+
+            // act
+            foreach (var scanItem in AvailableProducts.Items)
+            {
+                checkout.Scan(scanItem.SKU);
+                checkout.Scan(scanItem.SKU);
+            }
+
+
+            // assert
+            var result = checkout.CountItems();
+            Assert.AreEqual(AvailableProducts.Items.Count * 2, result);
+        }
     }
 }

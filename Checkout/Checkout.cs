@@ -11,12 +11,12 @@ namespace Checkout
     public class Checkout : ICheckout
     {
         private Discounts _discounts;
-        private List<Product> _items { get; set; }
+        private List<Product> _basket { get; set; }
 
         public Checkout(Discounts discounts)
         {
             _discounts = discounts;
-            _items = new List<Product>();
+            _basket = new List<Product>();
         }
 
         public int GetTotalPrice()
@@ -30,12 +30,17 @@ namespace Checkout
 
             if (product == null) throw new ArgumentOutOfRangeException("Unknown Sku");
 
-            _items.Add(product);
+            _basket.Add(product);
         }
 
         public List<Product> Find(string sku)
         {
-            return _items.FindAll(f => f.SKU == sku);
+            return _basket.FindAll(f => f.SKU == sku);
+        }
+
+        public int CountItems()
+        {
+            return _basket.Count;
         }
     }
 }
